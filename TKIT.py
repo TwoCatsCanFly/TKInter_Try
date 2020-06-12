@@ -42,7 +42,12 @@ button1.grid(row=1, column=1)
 button2.grid(row=1, column=2)
 
 # Статус
-status = Label(root, text='Wtf 1 of 10')
+status = Label(root,
+               text='Wtf 1 of 10, columnspan = 6, bd = 1, relief = SUNKEN, sticky = W+E, anchor = E',
+               bd = 1,
+               relief = SUNKEN,
+               anchor = E)
+status.grid(row=4, column=0, columnspan = 7, sticky = W+E)
 
 # картинки. поддержка gif встроенная
 root.iconbitmap('Windows.ico')
