@@ -47,12 +47,17 @@ status = Label(root,
                bd = 1,
                relief = SUNKEN,
                anchor = E)
-status.grid(row=4, column=0, columnspan = 7, sticky = W+E)
+status.grid(row=10, column=0, columnspan = 7, sticky = W+E)
+
+# Рамка
+frame = LabelFrame(root, text='Frame,  padx=5, pady=5', padx=15, pady=15)
+frame.grid(row=4, column=0, padx=10, pady=10)
+button_f = Button(frame, text = 'Im in a frame!!11').grid()
 
 # картинки. поддержка gif встроенная
 root.iconbitmap('Windows.ico')
 myImg = ImageTk.PhotoImage(Image.open('Test_img.jpg'))
-my_Label = Label(image=myImg).grid(row=3, column=1)
+my_Label = Label(frame, image=myImg).grid()
 
 # главный While True программы)))
 root.mainloop()
