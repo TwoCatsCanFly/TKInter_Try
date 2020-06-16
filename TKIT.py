@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import messagebox
+from tkinter import filedialog
 root = Tk()
 root.title('TKInter Tips')
 
@@ -91,7 +92,6 @@ def popup6():
     responce = messagebox.askyesno('messagebox.askyesno ','Текст Да или Нет')
     Label(frame_for_Popup, text='ОТВЕТ ДА').pack() if responce == 1 else Label(frame_for_Popup,
                                                                                    text='ОТВЕТ НЕТ').pack()
-
 pButton = Button(frame_for_Popup, text='showinfo', command=popup1).pack()
 pButton = Button(frame_for_Popup, text='showwarning', command=popup2).pack()
 pButton = Button(frame_for_Popup, text='showerror', command=popup3).pack()
@@ -100,16 +100,30 @@ pButton = Button(frame_for_Popup, text='askokcancel', command=popup5).pack()
 pButton = Button(frame_for_Popup, text='askyesno', command=popup6).pack()
 
 # Дополнительное окно
-
 def nw_open():
     global my_Img
-    nw = Toplevel()
+    nw = Toplevel() # Дополнительное окно вызывается именно так
     nw.title('Second Window')
     my_Img = ImageTk.PhotoImage(Image.open('Test_img.jpg'))
     imgLabel = Label(nw, image=my_Img).grid()
-
+    dBtn = Button(nw,text='DESTROY WINDOW!!!11', command=nw.destroy).grid()
 nw_btn = Button(root,text='New Window', command= nw_open).grid(row=4, column=3)
 
+# Открытие файлов
+def f_open():
+    global f_image
+    root.filename = filedialog.askopenfilename(initialdir='G:\Projects\TKInter_Try',
+                                               filetypes=(('png files', '*.png'),
+                                                          ('ico files', '*.ico'),
+                                                          ('jpg files', '*.jpg'),
+                                                          ('all files', '*.*')))
+    if root.filename:
+        f_image = ImageTk.PhotoImage(Image.open(root.filename))
+        f_v_image = Label(frame_for_file, image=f_image).pack()
+
+frame_for_file = LabelFrame(root, text='File', padx=15, pady=15)
+frame_for_file.grid(row=4, column=4, padx=10, pady=10)
+f_button = Button(frame_for_file, text='Open File',command=f_open).pack()
 
 
 # главный While True программы)))
