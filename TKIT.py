@@ -4,6 +4,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 root = Tk()
 root.title('TKInter Tips')
+#root.geometry('2000x1000')
 
 def loclick():
     myLabel4 = Label(root, text='loclick Function Clicked')
@@ -124,6 +125,21 @@ def f_open():
 frame_for_file = LabelFrame(root, text='File', padx=15, pady=15)
 frame_for_file.grid(row=4, column=4, padx=10, pady=10)
 f_button = Button(frame_for_file, text='Open File',command=f_open).pack()
+
+# Слайдеры
+def slide(x=None):
+    vertical_label = Label(frame_for_slider,text='vertical: '+ str(vertical.get())).grid(row=2, column=0)
+    horizontal_label = Label(frame_for_slider,text='horizontal: '+ str(horizontal.get())).grid(row=2, column=1)
+frame_for_slider = LabelFrame(root, text='Slider', padx=15, pady=15)
+frame_for_slider.grid(row=4, column=5, padx=10, pady=10)
+vertical = Scale(frame_for_slider, from_=0, to=100,command=slide)
+horizontal = Scale(frame_for_slider, from_=0, to=100, orient=HORIZONTAL,command=slide)
+slide()
+vertical.grid(row=0, column=0)
+horizontal.grid(row=1, column=0)
+
+
+
 
 
 # главный While True программы)))
