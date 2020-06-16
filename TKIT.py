@@ -138,6 +138,15 @@ slide()
 vertical.grid(row=0, column=0)
 horizontal.grid(row=1, column=0)
 
+# Чекбоксы
+
+frame_for_checkbox = LabelFrame(root, text='Чекбоксы', padx=15, pady=15)
+frame_for_checkbox.grid(row=4, column=6, padx=10, pady=10)
+def chck(val):
+    Label(frame_for_checkbox, text=val.get()).pack()
+chck_var = IntVar()
+chck_btn = Checkbutton(frame_for_checkbox, text='First box', variable=chck_var,command=lambda: chck(chck_var)).pack()
+
 
 
 
