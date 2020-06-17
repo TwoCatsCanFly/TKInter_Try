@@ -139,13 +139,30 @@ vertical.grid(row=0, column=0)
 horizontal.grid(row=1, column=0)
 
 # Чекбоксы
-
 frame_for_checkbox = LabelFrame(root, text='Чекбоксы', padx=15, pady=15)
 frame_for_checkbox.grid(row=4, column=6, padx=10, pady=10)
 def chck(val):
     Label(frame_for_checkbox, text=val.get()).pack()
-chck_var = IntVar()
-chck_btn = Checkbutton(frame_for_checkbox, text='First box', variable=chck_var,command=lambda: chck(chck_var)).pack()
+chck_var = StringVar()
+chck_btn = Checkbutton(frame_for_checkbox, text='First box', variable=chck_var, onvalue='ON',offvalue='OFF',command=lambda: chck(chck_var))
+chck_btn.deselect()
+chck_btn.pack()
+
+# Выпадающий список
+frame_for_droplist = LabelFrame(root, text='Дроплист', padx=15, pady=15)
+frame_for_droplist.grid(row=4, column=7, padx=10, pady=10)
+def drop_lst(x):
+    Label(frame_for_droplist, text=choosenone.get()).pack()
+options = ['one','two','three','OMG, 2020 WKUA']
+choosenone = StringVar()
+choosenone.set(options[0])
+drop = OptionMenu(frame_for_droplist, choosenone, *options,command=drop_lst).pack()
+
+# База данных
+
+
+
+
 
 
 
