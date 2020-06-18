@@ -296,6 +296,47 @@ def graph():
     plt.show()
 pl_btn = Button(frame_for_plot, text='График!',command=graph).pack()
 
+# Меню
+menu = Menu(root)  # Create menu
+root.config(menu=menu)
+
+def our_command():
+    pass
+
+# File menu
+file_menu = Menu(menu, tearoff = 0)
+menu.add_cascade(label='Файл',menu=file_menu)
+file_menu.add_command(label='Новый...',command=our_command)
+file_menu.add_command(label='Новый...',command=our_command)
+file_menu.add_command(label='Новый...',command=our_command)
+file_menu.add_command(label='Новый...',command=our_command)
+file_menu.add_separator()
+file_menu.add_command(label='Выход',command=root.quit)
+
+# Edit menu
+edit_menu = Menu(menu, tearoff = 0)
+menu.add_cascade(label='Edit',menu=edit_menu)
+
+# Super Edit menu
+super_edit_menu = Menu(edit_menu, tearoff = 0)
+super_edit_menu.add_command(label='Super Edit',command=our_command)
+super_edit_menu.add_command(label='Super Edit',command=our_command)
+edit_menu.add_cascade(label='Super Edit',menu = super_edit_menu)
+
+edit_menu.add_command(label='Edit',command=our_command)
+edit_menu.add_command(label='Edit',command=our_command)
+edit_menu.add_command(label='Edit',command=our_command)
+edit_menu.add_command(label='Edit',command=our_command)
+edit_menu.add_separator()
+edit_menu.add_command(label='Выход',command=root.quit)
+
+
+
+
+
+
+
+
 # главный While True программы)))
 root.mainloop()
 
