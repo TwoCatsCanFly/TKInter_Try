@@ -4,6 +4,8 @@ from tkinter import messagebox
 from tkinter import filedialog
 from datetime import date
 import sqlite3,requests,json,os
+import numpy as np
+import matplotlib.pyplot as plt
 root = Tk()
 root.title('TKInter Tips')
 #root.geometry('2000x1000')
@@ -285,8 +287,14 @@ api_key = Entry(frame_for_api, width = 40)
 api_key.insert(0, ak)
 api_key.pack()
 
-
-
+# Диаграммы и графики
+frame_for_plot = LabelFrame(root, text='Графики идиаграммы', padx=15, pady=15)
+frame_for_plot.grid(row=1, column=6, padx=10, pady=10)
+def graph():
+    house_prices = np.random.normal(200_000,25_000,5_000)
+    plt.hist(house_prices,50)
+    plt.show()
+pl_btn = Button(frame_for_plot, text='График!',command=graph).pack()
 
 # главный While True программы)))
 root.mainloop()
