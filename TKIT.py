@@ -8,13 +8,13 @@ root.title('TKInter Tips')
 #root.geometry('2000x1000')
 
 def loclick():
-    myLabel4 = Label(root, text='loclick Function Clicked')
-    myLabel4.grid(row=1, column=5)
+    mylabel4 = Label(root, text='loclick Function Clicked')
+    mylabel4.grid(row=1, column=5)
 def pquit():
     quit()
 def input_click():
-    input_Label = Label(root, text='Entered text: ' + input_box.get())
-    input_Label.grid(row=2, column=3)
+    input_label = Label(root, text='Entered text: ' + input_box.get())
+    input_label.grid(row=2, column=3)
 
 # Текст
 myLabel = Label(root, text='Hello world')
@@ -69,13 +69,13 @@ frame_for_radio.grid(row=4, column=1, padx=10, pady=10)
 r = IntVar()
 r.set('2')
 
-def rClicked(value):
+def rclicked(value):
     Label(frame_for_radio, text=value).pack()
 
-rButton = Radiobutton(frame_for_radio, text='Radiobutton 1', variable =r, value=1, command= lambda: rClicked(r.get())).pack()
-rButton1 = Radiobutton(frame_for_radio, text='Radiobutton 2', variable =r, value=2, command= lambda: rClicked(r.get())).pack()
-rButton2 = Radiobutton(frame_for_radio, text='Radiobutton 3', variable =r, value=3, command= lambda: rClicked(r.get())).pack()
-rButton3 = Radiobutton(frame_for_radio, text='Radiobutton 4', variable =r, value=4, command= lambda: rClicked(r.get())).pack()
+rButton = Radiobutton(frame_for_radio, text='Radiobutton 1', variable =r, value=1, command= lambda: rclicked(r.get())).pack()
+rButton1 = Radiobutton(frame_for_radio, text='Radiobutton 2', variable =r, value=2, command= lambda: rclicked(r.get())).pack()
+rButton2 = Radiobutton(frame_for_radio, text='Radiobutton 3', variable =r, value=3, command= lambda: rclicked(r.get())).pack()
+rButton3 = Radiobutton(frame_for_radio, text='Radiobutton 4', variable =r, value=4, command= lambda: rclicked(r.get())).pack()
 
 # Popup
 frame_for_Popup = LabelFrame(root, text='Popup', padx=15, pady=15)
@@ -107,8 +107,8 @@ def nw_open():
     nw = Toplevel() # Дополнительное окно вызывается именно так
     nw.title('Second Window')
     my_Img = ImageTk.PhotoImage(Image.open('Test_img.jpg'))
-    imgLabel = Label(nw, image=my_Img).grid()
-    dBtn = Button(nw,text='DESTROY WINDOW!!!11', command=nw.destroy).grid()
+    Label(nw, image=my_Img).grid()
+    Button(nw,text='DESTROY WINDOW!!!11', command=nw.destroy).grid()
 nw_btn = Button(root,text='New Window', command= nw_open).grid(row=4, column=3)
 
 # Открытие файлов
@@ -121,7 +121,7 @@ def f_open():
                                                           ('all files', '*.*')))
     if root.filename:
         f_image = ImageTk.PhotoImage(Image.open(root.filename))
-        f_v_image = Label(frame_for_file, image=f_image).pack()
+        Label(frame_for_file, image=f_image).pack()
 
 frame_for_file = LabelFrame(root, text='File', padx=15, pady=15)
 frame_for_file.grid(row=4, column=4, padx=10, pady=10)
@@ -129,8 +129,8 @@ f_button = Button(frame_for_file, text='Open File',command=f_open).pack()
 
 # Слайдеры
 def slide(x=None):
-    vertical_label = Label(frame_for_slider,text='vertical: '+ str(vertical.get())).grid(row=2, column=0)
-    horizontal_label = Label(frame_for_slider,text='horizontal: '+ str(horizontal.get())).grid(row=2, column=1)
+    Label(frame_for_slider,text='vertical: '+ str(vertical.get())).grid(row=2, column=0)
+    Label(frame_for_slider,text='horizontal: '+ str(horizontal.get())).grid(row=2, column=1)
 frame_for_slider = LabelFrame(root, text='Slider', padx=15, pady=15)
 frame_for_slider.grid(row=4, column=5, padx=10, pady=10)
 vertical = Scale(frame_for_slider, from_=0, to=100,command=slide)
@@ -160,18 +160,19 @@ choosenone.set(options[0])
 drop = OptionMenu(frame_for_droplist, choosenone, *options,command=drop_lst).pack()
 
 # База данных
+dbase = 'address_book.db'
 frame_for_database = LabelFrame(root, text='Дроплист', padx=15, pady=15)
 frame_for_database.grid(row=4, column=8, padx=10, pady=10)
-conn = sqlite3.connect('address_book.db') # create database + connect to it
+conn = sqlite3.connect(dbase) # create database + connect to it
 c = conn.cursor() # create cursor
 
-# c.execute('''CREATE TABLE addresses (
-#             first_name text,
-#             last_name text,
-#             address text,
-#             city text,
-#             state text,
-#             zipcode integer)''')
+c.execute('''CREATE TABLE IF NOT EXISTS addresses (
+            first_name text,
+            last_name text,
+            address text,
+            city text,
+            state text,
+            zipcode integer)''')
 
 f_name = Entry(frame_for_database, width=30)
 l_name = Entry(frame_for_database, width=30)
@@ -200,9 +201,8 @@ state_lbl.grid(row=4, column=0)
 zip_code_lbl.grid(row=5, column=0)
 
 def submit():
-    conn = sqlite3.connect('address_book.db')  # create database + connect to it
+    conn = sqlite3.connect(dbase)  # create database + connect to it
     c = conn.cursor()  # create cursor
-
     c.execute('INSERT INTO addresses VALUES (:f_name, :l_name, :address, :city, :state, :zip_code)',
         {'f_name': f_name.get(),
         'l_name': l_name.get(),
@@ -210,9 +210,6 @@ def submit():
         'city': city.get(),
         'state': state.get(),
         'zip_code': zip_code.get()})
-
-
-
     conn.commit()  # commit changes to database
     conn.close()  # close connection
     # clear texboxes
@@ -223,26 +220,19 @@ def submit():
     state.delete(0,END)
     zip_code.delete(0,END)
 def query():
-    conn = sqlite3.connect('address_book.db')  # create database + connect to it
+    conn = sqlite3.connect(dbase)  # create database + connect to it
     c = conn.cursor()  # create cursor
-
     c.execute('SELECT *,oid FROM addresses')
     records = c.fetchall()# сколько записей взять
     for id, record in enumerate(records):
         rid=9+id
         Label(frame_for_database,text=record).grid(row=rid,column=0)
-
-
     conn.commit()  # commit changes to database
     conn.close()  # close connection
-
-
 def destr_database():
-    conn = sqlite3.connect('address_book.db')  # create database + connect to it
+    conn = sqlite3.connect(dbase)  # create database + connect to it
     c = conn.cursor()  # create cursor
-
     c.execute('DELETE FROM addresses')
-
     conn.commit()  # commit changes to database
     conn.close()  # close connection
 
