@@ -2,7 +2,8 @@ from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import messagebox
 from tkinter import filedialog
-import sqlite3
+from datetime import date
+import sqlite3,requests,json,os
 root = Tk()
 root.title('TKInter Tips')
 #root.geometry('2000x1000')
@@ -58,7 +59,7 @@ button_f = Button(frame, text = 'Im in a frame!!11').grid()
 
 # картинки. поддержка gif встроенная
 root.iconbitmap('Windows.ico')
-myImg = ImageTk.PhotoImage(Image.open('Test_img.jpg'))
+myImg = ImageTk.PhotoImage(Image.open('Test_img.gif'))
 my_Label = Label(frame, image=myImg).grid()
 
 # Радио кнопки))
@@ -104,7 +105,7 @@ def nw_open():
     global my_Img
     nw = Toplevel() # Дополнительное окно вызывается именно так
     nw.title('Second Window')
-    my_Img = ImageTk.PhotoImage(Image.open('Test_img.jpg'))
+    my_Img = ImageTk.PhotoImage(Image.open('Test_img.gif'))
     Label(nw, image=my_Img).grid()
     Button(nw,text='DESTROY WINDOW!!!11', command=nw.destroy).grid()
 frame_for_window = LabelFrame(root, text='Новое Окно', padx=15, pady=15)
@@ -161,7 +162,7 @@ drop = OptionMenu(frame_for_droplist, choosenone, *options,command=drop_lst).pac
 
 # База данных
 dbase = 'address_book.db'
-frame_for_database = LabelFrame(root, text='Дроплист', padx=15, pady=15)
+frame_for_database = LabelFrame(root, text='База данных', padx=15, pady=15)
 frame_for_database.grid(row=0, column=4, padx=10, pady=10)
 conn = sqlite3.connect(dbase) # create database + connect to it
 c = conn.cursor() # create cursor
@@ -245,8 +246,44 @@ clear_btn = Button(frame_for_database, text='DESTROY Database',command=destr_dat
 conn.commit()  #commit changes to database
 conn.close()  #close connection
 
-
-
+# API проверка погоды в Вегасе.
+frame_for_api = LabelFrame(root, text='Погода', padx=15, pady=15)
+frame_for_api.grid(row=0, column=6, padx=10, pady=10)
+today = date.today()
+date_today = today.strftime("%Y-%m-%d")
+zc = '89129'
+ak = os.getenv('AIRNOW', 'Ваш airnowapi.org API ключ ')
+def w_check():
+    try:
+        if zip.get(): zc = zip.get()
+        if api_key.get(): ak = api_key.get()
+        api_req= requests.get(f'http://www.airnowapi.org/aq/forecast/zipCode/?format=application/json&zipCode={zc}&date={date_today}&distance=5&API_KEY={ak}')
+        api = json.loads(api_req.content)
+        city = api[0]['ReportingArea']
+        quality = api[0]['AQI']
+        category = api[0]['Category']['Name']
+        weather_colour = None
+        if category == 'Good': weather_colour = '#0C0'
+        elif category == 'Moderate': weather_colour = '#FFFF00'
+        elif category == 'Unhealthy for Sensitive Groups': weather_colour = '#FF9900'
+        elif category == 'Unhealthy': weather_colour = '#FF0000'
+        elif category == 'Very Unhealthy': weather_colour = '#990066'
+        elif category == 'Hazardous': weather_colour = '#660000'
+        Label(frame_for_api,
+              text=f'City: {city}\nQuality: {quality}\nCategory: {category}',
+              font=('Helvetica',20),
+              background = weather_colour).pack()
+    except Exception as e:
+        print(f'Error: {e}')
+w_check_button = Button(frame_for_api, text='Проверить погоду',command=w_check).pack()
+Label(frame_for_api,text='ZIP Код').pack()
+zip = Entry(frame_for_api, width = 40)
+zip.insert(0, zc)
+zip.pack()
+Label(frame_for_api,text='API ключ airnowapi.org').pack()
+api_key = Entry(frame_for_api, width = 40)
+api_key.insert(0, ak)
+api_key.pack()
 
 
 
