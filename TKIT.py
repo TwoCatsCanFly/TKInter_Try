@@ -1,7 +1,9 @@
 from tkinter import *
 from PIL import ImageTk,Image
 from tkinter import messagebox
+from tkinter import ttk
 from tkinter import filedialog
+from tkinter import colorchooser
 from datetime import date
 import sqlite3,requests,json,os
 import numpy as np
@@ -12,7 +14,7 @@ root.title('TKInter Tips')
 
 # Текст
 frame_for_label = LabelFrame(root, text='Лейблы, текст', padx=15, pady=15)
-frame_for_label.grid(row=0, column=0, padx=10, pady=10)
+frame_for_label.grid(row=0, column=8, padx=10, pady=10)
 myLabel = Label(frame_for_label, text='Hello world').pack()
 myLabel2 = Label(frame_for_label, text='TKInter').pack()
 myLabel3 = Label(frame_for_label, text='hello mr. Freeman').pack()
@@ -160,7 +162,7 @@ def drop_lst(x):
 options = ['one','two','three','OMG, 2020 WKUA']
 choosenone = StringVar()
 choosenone.set(options[0])
-drop = OptionMenu(frame_for_droplist, choosenone, *options,command=drop_lst).pack()
+drop = OptionMenu(frame_for_droplist, choosenone, *options, command=drop_lst).pack()
 
 # База данных
 dbase = 'address_book.db'
@@ -288,7 +290,7 @@ api_key.insert(0, ak)
 api_key.pack()
 
 # Диаграммы и графики
-frame_for_plot = LabelFrame(root, text='Графики идиаграммы', padx=15, pady=15)
+frame_for_plot = LabelFrame(root, text='Графики и диаграммы', padx=15, pady=15)
 frame_for_plot.grid(row=1, column=6, padx=10, pady=10)
 def graph():
     house_prices = np.random.normal(200_000,25_000,5_000)
@@ -297,19 +299,25 @@ def graph():
 pl_btn = Button(frame_for_plot, text='График!',command=graph).pack()
 
 # Меню
+frame_for_bar = LabelFrame(root, text='События из меню', padx=15, pady=15, width=120, height=300)
+frame_for_bar.grid(row=0, column=7, padx=10, pady=10)
+
 menu = Menu(root)  # Create menu
 root.config(menu=menu)
 
-def our_command():
-    pass
+def our_command(color='red'):
+    global frame_for_bar
+    frame_for_bar.destroy()
+    frame_for_bar = LabelFrame(root, text='События из меню', padx=15, pady=15, width=120, height=300, bg=f'{color}')
+    frame_for_bar.grid(row=0, column=7, padx=10, pady=10)
 
 # File menu
 file_menu = Menu(menu, tearoff = 0)
 menu.add_cascade(label='Файл',menu=file_menu)
-file_menu.add_command(label='Новый...',command=our_command)
-file_menu.add_command(label='Новый...',command=our_command)
-file_menu.add_command(label='Новый...',command=our_command)
-file_menu.add_command(label='Новый...',command=our_command)
+file_menu.add_command(label='Новый...',command=lambda: our_command('green'))
+file_menu.add_command(label='Новый...',command=lambda: our_command('green'))
+file_menu.add_command(label='Новый...',command=lambda: our_command('green'))
+file_menu.add_command(label='Новый...',command=lambda: our_command('green'))
 file_menu.add_separator()
 file_menu.add_command(label='Выход',command=root.quit)
 
@@ -319,20 +327,70 @@ menu.add_cascade(label='Edit',menu=edit_menu)
 
 # Super Edit menu
 super_edit_menu = Menu(edit_menu, tearoff = 0)
-super_edit_menu.add_command(label='Super Edit',command=our_command)
-super_edit_menu.add_command(label='Super Edit',command=our_command)
-edit_menu.add_cascade(label='Super Edit',menu = super_edit_menu)
+super_edit_menu.add_command(label='Параметр 1',command=lambda: our_command('blue'))
+super_edit_menu.add_command(label='Параметр 2',command=lambda: our_command('blue'))
+edit_menu.add_cascade(label='Опции',menu = super_edit_menu)
 
-edit_menu.add_command(label='Edit',command=our_command)
-edit_menu.add_command(label='Edit',command=our_command)
-edit_menu.add_command(label='Edit',command=our_command)
-edit_menu.add_command(label='Edit',command=our_command)
+edit_menu.add_command(label='Редактировать',command=our_command)
+edit_menu.add_command(label='Удалить',command=lambda: our_command('blue'))
+edit_menu.add_command(label='Уничтожить',command=lambda: our_command('yellow'))
+edit_menu.add_command(label='Зацензурить',command=lambda: our_command('orange'))
 edit_menu.add_separator()
 edit_menu.add_command(label='Выход',command=root.quit)
 
+#keyboard event
+frame_for_key = LabelFrame(root, text='Клавиши и события', padx=15, pady=15)
+frame_for_key.grid(row=1, column=7, padx=10, pady=10)
+key_label = Label(frame_for_key)
 
+def clicker(event=None):
+    if event:
+        global key_label
+        key_label.destroy()
+        key_label = Label(frame_for_key, text='Clicked '+ str(event.x) + ' ' + str(event.y))
+        key_label.pack()
 
+def combo_selected(event):
+    if drop_menu.get()=='one':
+        combo_label = Label(frame_for_key, text="ONE!!!").pack()
+    else:
+        combo_label = Label(frame_for_key, text=drop_menu.get()).pack()
 
+key_btn = Button(frame_for_key, text='Click!', command=clicker)
+key_btn.bind('<Enter>', clicker) # много разных событий ароде on_hover
+key_btn.pack()
+
+option_list = ['one','two','three']
+
+clicked = StringVar()
+clicked.set(options[0])
+drop_menu = ttk.Combobox(frame_for_key, value=option_list)
+drop_menu.current(0)
+drop_menu.bind('<<ComboboxSelected>>', combo_selected)
+drop_menu.pack()
+
+#Panels
+frame_for_panel = LabelFrame(root, text='Панели', padx=15, pady=15)
+frame_for_panel.grid(row=0, column=0, padx=10, pady=10)
+panel_1 = PanedWindow(frame_for_panel,bd=4,relief='raised',bg='red', width=500, height=200)
+panel_1.pack(fill=BOTH, expand=1)
+left_label = Label(panel_1,text='Left Panel')
+panel_1.add(left_label)
+
+panel_2 = PanedWindow(panel_1,orient=VERTICAL,bd=4,relief='raised',bg='Blue', width=300, height=200)
+panel_2.pack(fill=BOTH, expand=1)
+panel_1.add(panel_2)
+
+top_label = Label(panel_2,text='Top Panel')
+panel_2.add(top_label)
+
+bottom_label = Label(panel_2,text='Bottom Panel')
+panel_2.add(bottom_label)
+
+# Color Picker
+frame_for_colorpicker = LabelFrame(root, text='Color Picker', padx=15, pady=15)
+frame_for_colorpicker.grid(row=2, column=0, padx=10, pady=10)
+clr_btn = Button(frame_for_colorpicker,text='Color',command=colorchooser.askcolor).pack()
 
 
 
