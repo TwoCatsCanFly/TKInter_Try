@@ -390,7 +390,20 @@ panel_2.add(bottom_label)
 # Color Picker
 frame_for_colorpicker = LabelFrame(root, text='Color Picker', padx=15, pady=15)
 frame_for_colorpicker.grid(row=2, column=0, padx=10, pady=10)
-clr_btn = Button(frame_for_colorpicker,text='Color',command=colorchooser.askcolor).pack()
+clr_label = Label(frame_for_colorpicker,text=" ")
+clr_text_label = Label(frame_for_colorpicker,text="OMG Your Color IS")
+def color():
+    my_color = colorchooser.askcolor()[1]
+    global clr_label
+    global clr_text_label
+    if clr_label:clr_label.destroy()
+    if clr_text_label: clr_text_label.destroy()
+    clr_label = Label(frame_for_colorpicker,text=my_color)
+    clr_label.pack(pady=10)
+    clr_text_label = Label(frame_for_colorpicker,text="OMG Your Color IS", font=('Helvetica',32), bg=my_color)
+    clr_text_label.pack(pady=10)
+
+clr_btn = Button(frame_for_colorpicker,text='Color',command=color).pack()
 
 
 
