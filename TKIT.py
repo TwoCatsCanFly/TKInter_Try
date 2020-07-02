@@ -148,6 +148,8 @@ horizontal.grid(row=1, column=0)
 frame_for_checkbox = LabelFrame(root, text='Чекбоксы', padx=15, pady=15)
 frame_for_checkbox.grid(row=1, column=5, padx=10, pady=10)
 def chck(val):
+    for x,widget in enumerate(frame_for_checkbox.winfo_children()):
+        if x == 1: widget.destroy()
     Label(frame_for_checkbox, text=val.get()).pack()
 chck_var = StringVar()
 chck_btn = Checkbutton(frame_for_checkbox, text='First box', variable=chck_var, onvalue='ON',offvalue='OFF',command=lambda: chck(chck_var))
@@ -159,7 +161,7 @@ frame_for_droplist = LabelFrame(root, text='Дроплист', padx=15, pady=15)
 frame_for_droplist.grid(row=0, column=5, padx=10, pady=10)
 def drop_lst(x):
     Label(frame_for_droplist, text=choosenone.get()).pack()
-options = ['one','two','three','OMG, 2020 WKUA']
+options = ['one','two','three','OMG, 2020 W.K.U.A']
 choosenone = StringVar()
 choosenone.set(options[0])
 drop = OptionMenu(frame_for_droplist, choosenone, *options, command=drop_lst).pack()
@@ -390,20 +392,21 @@ panel_2.add(bottom_label)
 # Color Picker
 frame_for_colorpicker = LabelFrame(root, text='Color Picker', padx=15, pady=15)
 frame_for_colorpicker.grid(row=2, column=0, padx=10, pady=10)
-clr_label = Label(frame_for_colorpicker,text=" ")
 clr_text_label = Label(frame_for_colorpicker,text="OMG Your Color IS")
 def color():
     my_color = colorchooser.askcolor()[1]
-    global clr_label
     global clr_text_label
-    if clr_label:clr_label.destroy()
     if clr_text_label: clr_text_label.destroy()
-    clr_label = Label(frame_for_colorpicker,text=my_color)
-    clr_label.pack(pady=10)
-    clr_text_label = Label(frame_for_colorpicker,text="OMG Your Color IS", font=('Helvetica',32), bg=my_color)
+    clr_text_label = Label(frame_for_colorpicker,text=f"OMG Your Color IS: {my_color}", font=('Helvetica',32), bg=my_color)
     clr_text_label.pack(pady=10)
 
 clr_btn = Button(frame_for_colorpicker,text='Color',command=color).pack()
+
+# Unicode
+frame_for_unicode = LabelFrame(root, text='Лейблы, текст', padx=15, pady=15)
+frame_for_unicode.grid(row=2, column=1, padx=10, pady=10)
+unicode_label = Label(frame_for_unicode, text='41' + u'\u00b0', font=('Helvetica', 32)).pack()
+
 
 
 
